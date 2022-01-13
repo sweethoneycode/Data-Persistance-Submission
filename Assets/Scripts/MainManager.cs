@@ -33,7 +33,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    //    BestScoreText.text = $"Best Score : {MainManager.Instance.best_score}";
+        //    BestScoreText.text = $"Best Score : {MainManager.Instance.best_score}";
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -64,20 +64,27 @@ public class MainManager : MonoBehaviour
 
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
-            }
-        }
-        else if (m_GameOver)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
             }
         }
     }
 
+    public void RestartGame()
+    {
+        SaveScore();
+        SceneManager.LoadScene("main");
+
+    }
+
+    public void QuitGame()
+    {
+        SaveScore();
+        SceneManager.LoadScene("start");
+    }
+
     public void OnApplicationQuit()
     {
-        SaveGame.Instance.SaveScore(m_Points);
+        SaveScore();
     }
 
     void AddPoint(int point)
@@ -88,14 +95,23 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-        best_score = m_Points;
-        SaveGame.Instance.SaveScore(m_Points);
+  
+  
         BestScoreText.text = $"Best Score : {SaveGame.Instance.activeSave.best_score}";
         m_GameOver = true;
         GameOverText.SetActive(true);
+        
+
     }
 
-
-
+    void SaveScore()
+    {
+        if (best_score < m_Points)
+        {
+            best_score = m_Points;
+            SaveGame.Instance.SaveScore(m_Points);
+        }
+    }
+    
 
 }

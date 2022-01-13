@@ -7,13 +7,18 @@ public class Ball : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;
 
+    private AudioSource ballSound;
+
     void Start()
     {
+        ballSound = GetComponent<AudioSource>();
         m_Rigidbody = GetComponent<Rigidbody>();
     }
     
     private void OnCollisionExit(Collision other)
     {
+        ballSound.Play();
+
         var velocity = m_Rigidbody.velocity;
         
         //after a collision we accelerate a bit
